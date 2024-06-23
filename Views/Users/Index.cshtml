@@ -1,0 +1,93 @@
+﻿@model IEnumerable<WebApplication2.Models.User>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.min.css">
+    <title>@ViewData["Title"]</title>
+    <style>
+        body {
+            padding-top: 20px;
+        }
+
+        .table thead th {
+            background-color: #343a40;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <form asp-action="EditList" method="post">
+            @Html.AntiForgeryToken()
+            <div class="form-group mt-3">
+                <button type="submit" class="btn btn-primary">Save Changes</button>
+            </div>
+            <table class="table table-responsive">
+                <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.FirstName)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Surname)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.WhatsAppID)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Email)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.ActiveInt)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.AdminFlag)
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (int i = 0; i < Model.Count(); i++)
+                    {
+                        var item = Model.ElementAt(i);
+                        <tr>
+                            <td>
+                                <input asp-for="@Model.ElementAt(i).FirstName" class="form-control" name="users[@i].FirstName" />
+                            </td>
+                            <td>
+                                <input asp-for="@Model.ElementAt(i).Surname" class="form-control" name="users[@i].Surname" />
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.WhatsAppID)
+                                <input asp-for="@Model.ElementAt(i).WhatsAppID" class="form-control" type="hidden" name="users[@i].WhatsAppID" />
+                                <input asp-for="@Model.ElementAt(i).Id" class="form-control" type="hidden" name="users[@i].Id" />
+                            </td>
+                            <td>
+                                <input asp-for="@Model.ElementAt(i).Email" class="form-control" type="email" name="users[@i].Email" />
+                            </td>
+                            <td>
+                                <input class="form-check" type="checkbox" name="users[@i].Active" value="true" @(item.ActiveInt == 1 ? "checked" : "") />
+                            </td>
+                            <td>
+                                <input class="form-check" type="checkbox" name="users[@i].AdminFlag" disabled value="true" @(item.AdminFlag == 1 ? "checked" : "") />
+                            </td>
+                            <td>
+                                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </form>
+    </div>
+</body>
+</html>
